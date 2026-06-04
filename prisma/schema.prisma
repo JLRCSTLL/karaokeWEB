@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum QueueStatus {
+  pending
+  approved
+  playing
+  completed
+  skipped
+  rejected
+}
+
+model UserSession {
+  id                   String          @id @default(cuid())
+  sessionCode          String          @unique
+  name                 String
+  isActive             Boolean         @default(true)
+  guestRequestsEnabled Boolean         @default(true)
+  approvalRequired     Boolean         @default(false)
+  createdAt            DateTime        @default(now())
+  endedAt              DateTime?
+  queueItems           QueueItem[]
+  playbackState        PlaybackState?
+  history              QueueHistory[]
+}
+
+model Song {
+  id             String         @id @default(cuid())
+  youtubeVideoId String         @unique
+  title          String
+  artist         String?
+  channelName    String?
+  thumbnailUrl   String?
+  duration       String?
+  source         String         @default("youtube")
+  addedBy        String?
+  playCount      Int            @default(0)
+  isFavorite     Boolean        @default(false)
+  isBlacklisted  Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  queueItems     QueueItem[]
+  history        QueueHistory[]
+}
+
+model QueueItem {
+  id            String          @id @default(cuid())
+  sessionId     String
+  songId        String
+  requesterName String
+  status        QueueStatus     @default(approved)
+  position      Int
+  requestedAt   DateTime        @default(now())
+  startedAt     DateTime?
+  completedAt   DateTime?
+  session       UserSession     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  song          Song            @relation(fields: [songId], references: [id], onDelete: Cascade)
+  playback      PlaybackState[]
+
+  @@index([sessionId, status, position])
+}
+
+model PlaybackState {
+  id                 String       @id @default(cuid())
+  sessionId          String       @unique
+  currentQueueItemId String?
+  playerState        String       @default("idle")
+  updatedAt          DateTime     @updatedAt
+  session            UserSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  currentQueueItem   QueueItem?   @relation(fields: [currentQueueItemId], references: [id], onDelete: SetNull)
+}
+
+model QueueHistory {
+  id            String      @id @default(cuid())
+  sessionId     String
+  songId        String?
+  requesterName String?
+  action        String
+  timestamp     DateTime    @default(now())
+  session       UserSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  song          Song?       @relation(fields: [songId], references: [id], onDelete: SetNull)
+}

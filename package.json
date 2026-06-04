@@ -6,16 +6,36 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prisma:generate": "prisma generate",
+    "db:check": "node scripts/ensure-database-url.mjs",
+    "supabase:check": "node scripts/ensure-supabase-env.mjs",
+    "db:migrate": "npm run db:check && prisma migrate deploy",
+    "prisma:migrate": "npm run db:migrate",
+    "prisma:migrate:dev": "npm run db:check && prisma migrate dev",
+    "db:seed": "npm run supabase:check && prisma db seed"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "@supabase/supabase-js": "^2.107.0",
+    "dotenv": "^17.4.2",
+    "lucide-react": "^1.17.0",
     "next": "16.2.7",
+    "pg": "^8.21.0",
+    "prisma": "^7.8.0",
+    "qrcode": "^1.5.4",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

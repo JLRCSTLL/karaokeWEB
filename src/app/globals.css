@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #050505;
+  --foreground: #f8fafc;
 }
 
 @theme inline {
@@ -12,15 +12,211 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+a,
+input {
+  min-width: 0;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.panel {
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 8px;
+  background: rgb(24 24 27 / 0.78);
+  box-shadow: 0 20px 80px rgb(0 0 0 / 0.22);
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #67e8f9;
+}
+
+.field-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #d4d4d8;
+}
+
+.field {
+  width: 100%;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 8px;
+  background: rgb(9 9 11 / 0.78);
+  padding: 0.75rem 0.9rem;
+  color: white;
+  outline: none;
+}
+
+.field:focus {
+  border-color: rgb(103 232 249 / 0.75);
+  box-shadow: 0 0 0 3px rgb(103 232 249 / 0.16);
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.btn-danger,
+.toggle-on,
+.toggle-off {
+  display: inline-flex;
+  min-height: 2.55rem;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.btn-primary {
+  border: 1px solid rgb(34 211 238 / 0.4);
+  background: #06b6d4;
+  color: #082f49;
+}
+
+.btn-primary:hover {
+  background: #67e8f9;
+}
+
+.btn-secondary {
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.07);
+  color: white;
+}
+
+.btn-secondary:hover,
+.btn-ghost:hover,
+.icon-button:hover {
+  border-color: rgb(103 232 249 / 0.4);
+  background: rgb(103 232 249 / 0.12);
+  color: white;
+}
+
+.btn-ghost {
+  border: 1px solid transparent;
+  color: #d4d4d8;
+}
+
+.btn-danger {
+  border: 1px solid rgb(251 113 133 / 0.35);
+  background: rgb(244 63 94 / 0.16);
+  color: #fecdd3;
+}
+
+.toggle-on {
+  border: 1px solid rgb(52 211 153 / 0.45);
+  background: rgb(16 185 129 / 0.16);
+  color: #d1fae5;
+}
+
+.toggle-off {
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.04);
+  color: #d4d4d8;
+}
+
+.icon-button {
+  display: inline-flex;
+  height: 2.35rem;
+  width: 2.35rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.05);
+  color: #e4e4e7;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.metric {
+  display: flex;
+  min-height: 8rem;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 8px;
+  background: rgb(24 24 27 / 0.78);
+  padding: 1rem;
+  color: #e4e4e7;
+}
+
+.metric svg {
+  color: #67e8f9;
+}
+
+.metric span {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: white;
+}
+
+.metric p {
+  font-size: 0.84rem;
+  color: #a1a1aa;
+}
+
+.toast {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 50;
+  max-width: min(24rem, calc(100vw - 2rem));
+  border: 1px solid rgb(103 232 249 / 0.35);
+  border-radius: 8px;
+  background: rgb(8 47 73 / 0.94);
+  padding: 0.85rem 1rem;
+  color: #ecfeff;
+  box-shadow: 0 20px 80px rgb(0 0 0 / 0.35);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.marquee {
+  display: inline-block;
+  min-width: 100%;
+  animation: marquee 24s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
 }
