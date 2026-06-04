@@ -15,12 +15,13 @@ export function getDatabaseIssue(error: unknown): DatabaseIssue | null {
 
   if (
     message.includes("NEXT_PUBLIC_SUPABASE_URL is not configured") ||
-    message.includes("SUPABASE_SERVICE_ROLE_KEY is not configured")
+    message.includes("SUPABASE_SERVICE_ROLE_KEY is not configured") ||
+    message.includes("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is not configured")
   ) {
     return {
       title: "Supabase is not configured",
       message:
-        "The backend now uses Supabase directly. Add NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to .env.",
+        "The backend now uses Supabase directly. Add NEXT_PUBLIC_SUPABASE_URL and a Supabase service-role or publishable key to .env.",
       commands: ["npm run supabase:check", "npm run dev"],
     };
   }

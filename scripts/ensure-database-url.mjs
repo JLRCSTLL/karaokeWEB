@@ -1,4 +1,8 @@
-import "dotenv/config";
+import nextEnv from "@next/env";
+
+const { loadEnvConfig } = nextEnv;
+
+loadEnvConfig(process.cwd());
 
 const databaseUrl = process.env.DATABASE_URL?.trim();
 const placeholders = ["", "postgres://prisma.[PROJECT-REF]:[PRISMA-PASSWORD]@[DB-REGION].pooler.supabase.com:5432/postgres"];

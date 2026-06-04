@@ -1,22 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
+import { updateSession } from "@/utils/supabase/middleware";
 
 const adminCookieName = "karaoke_admin";
 
-export function proxy(request: NextRequest) {
+function copyCookies(source: NextResponse, target: NextResponse) {
+  source.cookies.getAll().forEach((cookie) => {
+    target.cookies.set(cookie);
+  });
+}
+
+export async function proxy(request: NextRequest) {
+  const supabaseResponse = await updateSession(request);
   const isLogin = request.nextUrl.pathname === "/admin/login";
+  const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
   const hasCookie = Boolean(request.cookies.get(adminCookieName)?.value);
 
-  if (!hasCookie && !isLogin) {
-    return NextResponse.redirect(new URL("/admin/login", request.url));
+  if (isAdminPath && !hasCookie && !isLogin) {
+    const response = NextResponse.redirect(new URL("/admin/login", request.url));
+    copyCookies(supabaseResponse, response);
+    return response;
   }
 
-  if (hasCookie && isLogin) {
-    return NextResponse.redirect(new URL("/admin", request.url));
+  if (isAdminPath && hasCookie && isLogin) {
+    const response = NextResponse.redirect(new URL("/admin", request.url));
+    copyCookies(supabaseResponse, response);
+    return response;
   }
 
-  return NextResponse.next();
+  return supabaseResponse;
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+  ],
 };
